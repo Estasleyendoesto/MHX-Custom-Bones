@@ -12,9 +12,9 @@ import math
 # 4. Run Script
 
 
-# Choose male or female or both on False
+# Choose female before run the script
 is_female = False
-is_male   = False
+
 
 # Custom Shapes
 bones = [
@@ -79,6 +79,13 @@ bones = [
         'customShape': 'Circle',
         'scale': (3.07, 3.913, 3.476),
         'translation': (-0.005, 0.19, 0.02),
+        'rotation': (0, 0, 0)
+    },
+    {
+        'bone': 'pelvis',
+        'customShape': 'Sphere',
+        'scale': (1.5, 1.5, 1.5),
+        'translation': (0, 0.05, 0),
         'rotation': (0, 0, 0)
     },
     {
@@ -210,7 +217,7 @@ def hide_bones():
     armature.bones['elbowPoleA.R'].bone.hide = True
     
 
-# Move head unused bones
+# Move unused bones
 def change_bones_layer():
     # head
     bones = [
@@ -220,6 +227,9 @@ def change_bones_layer():
     for bone in bones:
         armature.bones[bone].bone.layers[10] = False
         armature.bones[bone].bone.layers[24] = True
+        
+    armature.bones['pelvis'].bone.layers[25] = True
+    
         
         
 # Creation of bone groups
@@ -279,6 +289,10 @@ def change_bonegroup_color():
 # Assing bone groups
 def assing_bonegroup():
     bdata = [
+        {
+            'bonegroup': 'Spine',
+            'bones': ['pelvis']
+        },
         { 
             'bonegroup': 'Ik', 
             'bones': [ 'hand.ik.R', 'hand.ik.L', 'foot.ik.R', 'foot.ik.L' ] 
@@ -306,6 +320,151 @@ def assing_bonegroup():
     for b in bdata:
         for bone in b['bones']:
             armature.bones[ bone ].bone_group = armature.bone_groups[ b['bonegroup'] ]
+
+
+# Lock bones
+def lock_bones():
+    # armature.bones['hip'].lock_location[0] = True
+    bones = [
+        {
+            'bone': 'gaze',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'gaze.R',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'gaze.L',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'neckhead',
+            'location': (True, True, True),
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'clavicle.R',
+            'location': (True, True, True),
+            'rotation': (False, True, False),
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'clavicle.L',
+            'location': (True, True, True),
+            'rotation': (False, True, False),
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'pectoral.R',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'pectoral.L',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'upper_arm.ik.twist.R',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'upper_arm.ik.twist.L',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'forearm.ik.twist.R',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'forearm.ik.twist.L',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'elbow.pt.ik.R',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'elbow.pt.ik.L',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'hand.ik.R',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'hand.ik.L',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'back',
+            'location': (True, True, True),
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'pelvis',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'hip',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'thig.ik.twist.R',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'thig.ik.twist.L',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'shin.ik.twist.R',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'shin.ik.twist.L',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'knee.pt.ik.R',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'knee.pt.ik.L',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'foot.ik.R',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'foot.ik.L',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'foot.rev.R',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'foot.rev.L',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'toe.rev.R',
+            'scale': (True, True, True),
+        },
+        {
+            'bone': 'toe.rev.L',
+            'scale': (True, True, True),
+        },
+    ]
+    
+    for b in bones:
+        if b['location']:
+            armature.bones[ b['bone'] ].lock_location = b['location']
+        if b['rotation']:
+            armature.bones[ b['bone'] ].lock_rotation = b['rotation']
+        if b['scale']:
+            armature.bones[ b['bone'] ].lock_scale = b['scale']
  
             
 # Female 
@@ -323,7 +482,6 @@ def set_female_bones():
         arm.layers[25] = True
         
     
-    
 def run():
     set_custom_shape()
     hide_bones()
@@ -332,9 +490,9 @@ def run():
     change_bonegroup_theme()
     change_bonegroup_color()
     assing_bonegroup()
-    
+    lock_bones()
     set_female_bones()
     
 
 # Run
-#run()
+run()
